@@ -35,11 +35,11 @@ class MainScreen : BaseScreen {
 * Создать бизнес слой, используя ViewModel, на архитектуре MVI
  */
     @Composable
-    fun RefreshTheFact(onClick: (Unit) -> Unit) {
-        var loadingState by remember { mutableStateOf(false) }
+    fun RefreshTheFact() {
+        val loadingState by remember { mutableStateOf(false) }
         val circularDimens = 30.dp
 
-        Button(onClick = { onClick }) {
+        Button(onClick = { }) {
             if (loadingState) {
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.surface,
@@ -73,7 +73,7 @@ class MainScreen : BaseScreen {
         if (isSelected) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_star_24),
-                contentDescription = "Удалить из избранного",
+                contentDescription = stringResource(R.string.delete_from_favorites),
                 modifier = Modifier
                     .padding(start = startPaddingOfStar)
                     .clickable { isSelected = false }
@@ -81,7 +81,7 @@ class MainScreen : BaseScreen {
         } else {
             Image(
                 painter = painterResource(id = R.drawable.baseline_star_border_24),
-                contentDescription = "Добавить в избранное",
+                contentDescription = stringResource(R.string.add_to_favorites),
                 modifier = Modifier
                     .padding(start = startPaddingOfStar)
                     .clickable { isSelected = true }
@@ -101,18 +101,12 @@ class MainScreen : BaseScreen {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         TextOfFact(text = "GACHI")
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            RefreshTheFact {
-
-                            }
+                            RefreshTheFact()
                             StarOfFavorite()
                         }
                     }
                 }
             }
         }
-    }
-
-    companion object {
-        const val TAG = "MainScreen"
     }
 }
