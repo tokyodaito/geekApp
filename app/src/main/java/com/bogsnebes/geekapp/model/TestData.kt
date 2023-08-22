@@ -1,9 +1,10 @@
 package com.bogsnebes.geekapp.model
 
 import com.bogsnebes.geekapp.model.dto.FactDto
+import io.reactivex.rxjava3.core.Single
 
 object TestData {
-    val factsList = listOf(
+    private val factsList = listOf(
         FactDto(
             id = "521997d834286f6e624f35f4aa193915",
             text = "In the 1980`s American migraines increased by 60%.",
@@ -69,4 +70,6 @@ object TestData {
             permalink = "https://uselessfacts.jsph.pl/api/v2/facts/6c3e7ab9c687ba956c631ff580e97946"
         )
     )
+
+    fun getData() = Single.just(factsList)
 }

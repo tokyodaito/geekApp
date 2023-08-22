@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,18 +29,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bogsnebes.geekapp.R
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
+import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Event
+import com.bogsnebes.geekapp.ui.screens.main_screen.elm.storeFactory
 import com.bogsnebes.geekapp.ui.theme.GeekappTheme
 
 class MainScreen : BaseScreen {
     /* TODO: Создать business-слой
 * Создать бизнес слой, используя ViewModel, на архитектуре MVI
  */
+
+    private val store = storeFactory()
+
+
     @Composable
     fun RefreshTheFact() {
-        val loadingState by remember { mutableStateOf(false) }
+        var loadingState by remember { mutableStateOf(store.currentState.isLoading) }
+        SideEffect {
+            store.states {
+                loadingState = it.isLoading
+            }
+        }
+
         val circularDimens = 30.dp
 
-        Button(onClick = { }) {
+        Button(onClick = { store.accept(Event.Ui.ClickReload) }) {
             if (loadingState) {
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.surface,
@@ -57,7 +70,23 @@ class MainScreen : BaseScreen {
     }
 
     @Composable
-    fun TextOfFact(text: String) {
+    fun TextOfFact() {
+        var text by remember {
+            mutableStateOf(
+                if (store.currentState.data != null)
+                    store.currentState.data!!
+                else
+                    "GACHI"
+            )
+        }
+        SideEffect {
+            store.states {
+                if (it.data != null) {
+                    text = it.data
+                }
+            }
+        }
+
         Text(text = text, textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
     }
 
@@ -91,7 +120,8 @@ class MainScreen : BaseScreen {
 
     @Preview(showBackground = true)
     @Composable
-    override fun Content() {
+    override fun DisplayContent() {
+        store.accept(Event.Ui.Init)
         GeekappTheme {
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -99,7 +129,7 @@ class MainScreen : BaseScreen {
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        TextOfFact(text = "GACHI")
+                        TextOfFact()
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RefreshTheFact()
                             StarOfFavorite()
