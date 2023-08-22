@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,19 +29,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bogsnebes.geekapp.R
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
+import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Event
+import com.bogsnebes.geekapp.ui.screens.main_screen.elm.State
+import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Store
 import com.bogsnebes.geekapp.ui.theme.GeekappTheme
 
 class MainScreen : BaseScreen {
     /* TODO: Создать business-слой
 * Создать бизнес слой, используя ViewModel, на архитектуре MVI
  */
+
+    private val viewModel: Store = Store()
+
     @Composable
     fun RefreshTheFact() {
-        val loadingState by remember { mutableStateOf(false) }
+        val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
         val circularDimens = 30.dp
 
-        Button(onClick = { }) {
-            if (loadingState) {
+        Button(onClick = { viewModel.update(Event.Ui.ClickReload) }) {
+            if (state.value.isLoading) {
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier
@@ -57,8 +64,15 @@ class MainScreen : BaseScreen {
     }
 
     @Composable
-    fun TextOfFact(text: String) {
-        Text(text = text, textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
+    fun TextOfFact() {
+        val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
+        (if (state.value.data != null) state.value.data else "GACHI")?.let {
+            Text(
+                text = it,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
 
     /* TODO: Эффект частиц.
@@ -92,6 +106,7 @@ class MainScreen : BaseScreen {
     @Preview(showBackground = true)
     @Composable
     override fun Content() {
+        viewModel.update(Event.Ui.Init)
         GeekappTheme {
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -99,7 +114,7 @@ class MainScreen : BaseScreen {
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        TextOfFact(text = "GACHI")
+                        TextOfFact()
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RefreshTheFact()
                             StarOfFavorite()
