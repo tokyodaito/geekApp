@@ -101,7 +101,7 @@ class MainScreen : BaseScreen {
 
     @Preview(showBackground = true)
     @Composable
-    override fun Content() {
+    override fun DisplayContent() {
         val viewModel: Store = viewModel()
         viewModel.update(Event.Ui.Init)
         GeekappTheme {

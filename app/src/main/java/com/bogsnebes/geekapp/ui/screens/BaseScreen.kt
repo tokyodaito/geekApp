@@ -4,5 +4,5 @@ import androidx.compose.runtime.Composable
 
 interface BaseScreen {
     @Composable
-    fun Content()
+    fun DisplayContent()
 }
