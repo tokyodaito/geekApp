@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bogsnebes.geekapp.R
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
 import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Event
@@ -35,14 +36,9 @@ import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Store
 import com.bogsnebes.geekapp.ui.theme.GeekappTheme
 
 class MainScreen : BaseScreen {
-    /* TODO: Создать business-слой
-* Создать бизнес слой, используя ViewModel, на архитектуре MVI
- */
-
-    private val viewModel: Store = Store()
 
     @Composable
-    fun RefreshTheFact() {
+    fun RefreshTheFact(viewModel: Store) {
         val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
         val circularDimens = 30.dp
 
@@ -64,7 +60,7 @@ class MainScreen : BaseScreen {
     }
 
     @Composable
-    fun TextOfFact() {
+    fun TextOfFact(viewModel: Store) {
         val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
         (if (state.value.data != null) state.value.data else "GACHI")?.let {
             Text(
@@ -106,6 +102,7 @@ class MainScreen : BaseScreen {
     @Preview(showBackground = true)
     @Composable
     override fun Content() {
+        val viewModel: Store = viewModel()
         viewModel.update(Event.Ui.Init)
         GeekappTheme {
             Surface(
@@ -114,9 +111,9 @@ class MainScreen : BaseScreen {
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        TextOfFact()
+                        TextOfFact(viewModel)
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            RefreshTheFact()
+                            RefreshTheFact(viewModel)
                             StarOfFavorite()
                         }
                     }
