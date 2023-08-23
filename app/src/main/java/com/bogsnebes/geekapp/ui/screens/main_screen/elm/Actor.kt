@@ -18,8 +18,8 @@ class Actor {
                     }
                 }
                 .switchIfEmpty(Maybe.fromCallable<Event.Internal> { null }.toObservable())
-                .doOnError {
-                    Event.Internal.ErrorLoadingValue
+                .onErrorResumeNext {
+                    Observable.just(Event.Internal.ErrorLoadingValue)
                 }
         }
     }
