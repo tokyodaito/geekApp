@@ -1,8 +1,14 @@
 [versions]
 activityComposeVersion = "1.7.2"
+adapterRxjava2Version = "2.9.0"
+converterGsonVersion = "2.3.0"
 coreKtxVersion = "1.10.1"
+daggerCompilerVersion = "2.47"
+daggerVersion = "2.47"
 elmslieVersion = "2.1.1"
 lifecycleVersion = "2.6.1"
+loggingInterceptorVersion = "3.9.0"
+retrofitVersion = "2.9.0"
 rxandroidVersion = "3.0.2"
 rxjava = "3.1.5"
 rxJavaVersion = "3.1.6"
@@ -17,6 +23,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
 
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompilerVersion" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "daggerVersion" }
 
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroidVersion" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxJavaVersion" }
@@ -34,10 +42,16 @@ androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-mani
 androidx-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodelComposeVersion" }
 androidx-viewmodel-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "viewmodelLiveDataVersion" }
 
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptorVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+retrofit-adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "adapterRxjava2Version" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-kotlin-kapt = {id = "kotlin-kapt"}
 
 [bundles]
 android-core = [
@@ -67,4 +81,11 @@ viewmodel = [
 debugCompose = [
     "androidx-compose-ui-tooling",
     "androidx-compose-ui-test-manifest"
+]
+
+retrofit = [
+    "retrofit",
+    "retrofit-adapter-rxjava3",
+    "logging-interceptor",
+    "converter-gson"
 ]

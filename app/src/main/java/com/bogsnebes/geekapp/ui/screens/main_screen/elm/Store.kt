@@ -21,6 +21,7 @@ class Store : ViewModel() {
     @SuppressLint("CheckResult")
     fun update(event: Event.Ui) {
         if (event == Event.Ui.Init) {
+            _state.value = State(isLoading = true, _state.value?.data)
             _effect.value = null
             actor.execute(Command.LoadNewData)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -28,6 +29,7 @@ class Store : ViewModel() {
                     reducer.internal(it)
                 }
         } else {
+            _state.value = State(isLoading = true, _state.value?.data)
             _effect.value = null
             actor.execute(Command.LoadNewData)
                 .observeOn(AndroidSchedulers.mainThread())

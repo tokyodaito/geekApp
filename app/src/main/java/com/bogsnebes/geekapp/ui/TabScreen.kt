@@ -1,5 +1,6 @@
 package com.bogsnebes.geekapp.ui
 
+import com.bogsnebes.geekapp.Application
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
 
 sealed class TabScreen {
@@ -7,6 +8,6 @@ sealed class TabScreen {
 
     data object MainScreen : TabScreen() {
         override val screen: BaseScreen
-            get() = com.bogsnebes.geekapp.ui.screens.main_screen.MainScreen()
+            get() = Application.appComponent.getMainScreen()
     }
 }
