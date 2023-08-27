@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class Actor {
-    private val factsImpl: FactsImpl = Application.appComponent.getFactsImpl()
+    private val factsImpl: FactsImpl = Application.dataBaseComponent.getFactsImpl()
     fun execute(command: Command): Observable<Event.Internal> {
         return when (command) {
             is Command.LoadNewData -> factsImpl.getRandomFact(FactsApi.ENGLISH)

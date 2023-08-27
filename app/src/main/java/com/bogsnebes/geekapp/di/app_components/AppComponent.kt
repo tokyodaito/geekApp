@@ -1,10 +1,9 @@
-package com.bogsnebes.geekapp.di
+package com.bogsnebes.geekapp.di.app_components
 
-import com.bogsnebes.geekapp.model.impl.FactsImpl
+import android.content.Context
 import com.bogsnebes.geekapp.ui.elements.BottomNavMenu
 import com.bogsnebes.geekapp.ui.screens.main_screen.MainScreen
 import dagger.Component
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Singleton
@@ -12,9 +11,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun getMainScreen(): MainScreen
 
-    fun getRetrofit(): Retrofit
-
-    fun getFactsImpl(): FactsImpl
-
     fun getBottomNavMenu(): BottomNavMenu
+
+    fun getApplicationContext(): Context
 }

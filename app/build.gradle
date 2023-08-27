@@ -71,5 +71,9 @@ dependencies {
 
     // Retrofit
     implementation libs.bundles.retrofit
+
+    // Room
+    implementation libs.bundles.room
+    kapt libs.androidx.room.compiler
 }
 

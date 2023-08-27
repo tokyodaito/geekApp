@@ -1,9 +1,5 @@
-package com.bogsnebes.geekapp.di
+package com.bogsnebes.geekapp.di.network
 
-import com.bogsnebes.geekapp.model.impl.FactsImpl
-import com.bogsnebes.geekapp.ui.elements.BottomNavItem
-import com.bogsnebes.geekapp.ui.elements.BottomNavMenu
-import com.bogsnebes.geekapp.ui.screens.main_screen.MainScreen
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -15,10 +11,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppModule {
-    @Provides
-    fun getMainScreen() = MainScreen()
-
+class NetworkModule {
     @Provides
     @Singleton
     fun getRetrofit(): Retrofit {
@@ -39,16 +32,6 @@ class AppModule {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
-    }
-
-    @Provides
-    fun getFactsImpl(): FactsImpl {
-        return FactsImpl()
-    }
-
-    @Provides
-    fun getBottomNavMenu(): BottomNavMenu {
-        return BottomNavMenu()
     }
 
     companion object {

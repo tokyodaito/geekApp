@@ -6,7 +6,7 @@ import com.bogsnebes.geekapp.model.network.json.Fact
 import io.reactivex.rxjava3.core.Single
 
 class FactsImpl {
-    private val factsApi = Application.appComponent.getRetrofit().create(FactsApi::class.java)
+    private val factsApi = Application.networkComponent.getRetrofit().create(FactsApi::class.java)
 
     fun getRandomFact(language: FactsApi.Languages): Single<Fact> {
         return factsApi.getRandom(language)
