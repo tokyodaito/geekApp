@@ -1,7 +1,8 @@
 package com.bogsnebes.geekapp.di
 
+import com.bogsnebes.geekapp.Application
 import com.bogsnebes.geekapp.model.impl.FactsImpl
-import com.bogsnebes.geekapp.ui.elements.BottomNavItem
+import com.bogsnebes.geekapp.ui.MainActivity
 import com.bogsnebes.geekapp.ui.elements.BottomNavMenu
 import com.bogsnebes.geekapp.ui.screens.main_screen.MainScreen
 import dagger.Module
@@ -49,6 +50,17 @@ class AppModule {
     @Provides
     fun getBottomNavMenu(): BottomNavMenu {
         return BottomNavMenu()
+    }
+
+    @Provides
+    @Singleton
+    fun getApplication(): Application {
+        return Application()
+    }
+
+    @Provides
+    fun getMainActivity(): MainActivity {
+        return MainActivity()
     }
 
     companion object {

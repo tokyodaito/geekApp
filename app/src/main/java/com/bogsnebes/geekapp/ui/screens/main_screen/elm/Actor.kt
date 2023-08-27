@@ -1,6 +1,7 @@
 package com.bogsnebes.geekapp.ui.screens.main_screen.elm
 
 import com.bogsnebes.geekapp.Application
+import com.bogsnebes.geekapp.Languages
 import com.bogsnebes.geekapp.model.impl.FactsImpl
 import com.bogsnebes.geekapp.model.network.api.FactsApi
 import io.reactivex.rxjava3.core.Maybe
@@ -24,5 +25,9 @@ class Actor {
                     Observable.just(Event.Internal.ErrorLoadingValue)
                 }
         }
+    }
+
+    fun changeLanguage(languages: Languages) {
+        Application.appComponent.getApplication().changeLanguage(languages)
     }
 }

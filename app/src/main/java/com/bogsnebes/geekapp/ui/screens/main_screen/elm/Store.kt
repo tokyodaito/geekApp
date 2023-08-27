@@ -18,24 +18,30 @@ class Store : ViewModel() {
     private val actor = Actor()
     private val reducer = Reducer(_state, _effect)
 
-    @SuppressLint("CheckResult")
     fun update(event: Event.Ui) {
-        if (event == Event.Ui.Init) {
-            _state.value = State(isLoading = true, _state.value?.data)
-            _effect.value = null
-            actor.execute(Command.LoadNewData)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    reducer.internal(it)
-                }
-        } else {
-            _state.value = State(isLoading = true, _state.value?.data)
-            _effect.value = null
-            actor.execute(Command.LoadNewData)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    reducer.internal(it)
-                }
+        when (event) {
+            is Event.Ui.Init -> {
+                changeStateToLoad()
+            }
+
+            is Event.Ui.ClickReload -> {
+                changeStateToLoad()
+            }
+
+            is Event.Ui.ChangeLanguage -> {
+                actor.changeLanguage(event.language)
+            }
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun changeStateToLoad() {
+        _state.value = State(isLoading = true, _state.value?.data)
+        _effect.value = null
+        actor.execute(Command.LoadNewData)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                reducer.internal(it)
+            }
     }
 }
