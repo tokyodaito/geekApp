@@ -23,6 +23,47 @@ class Application : Application() {
         dataBaseComponent.getDatabase()
     }
 
+    fun changeLanguage(languages: Languages) {
+        when (languages) {
+            Languages.ENGLISH -> {
+                val locale = Locale("en")
+                Locale.setDefault(locale)
+                context.apply {
+                    resources.configuration.setLocale(
+                        locale
+                    )
+                    createConfigurationContext(resources.configuration)
+                    ActivityCompat.recreate(appComponent.getMainActivity())
+                }
+            }
+
+            Languages.GERMAN -> {
+                val locale = Locale("ge")
+                Locale.setDefault(locale)
+                context.apply {
+                    resources.configuration.setLocale(
+                        locale
+                    )
+                    createConfigurationContext(resources.configuration)
+                    ActivityCompat.recreate(appComponent.getMainActivity())
+                }
+
+            }
+
+            Languages.RUSSIAN -> {
+                val locale = Locale("ru")
+                Locale.setDefault(locale)
+                context.apply {
+                    resources.configuration.setLocale(
+                        locale
+                    )
+                    createConfigurationContext(resources.configuration)
+                    ActivityCompat.recreate(appComponent.getMainActivity())
+                }
+            }
+        }
+    }
+
     companion object {
         lateinit var appComponent: AppComponent
             private set

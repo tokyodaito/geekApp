@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,10 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bogsnebes.geekapp.Languages
 import com.bogsnebes.geekapp.R
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
 import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Event
@@ -56,6 +59,16 @@ class MainScreen : BaseScreen {
                     textAlign = TextAlign.Center
                 )
             }
+        }
+    }
+
+    @Composable
+    fun TranslateFact(viewModel: Store) {
+        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = stringResource(id = R.string.translate_the_fact),
+                textAlign = TextAlign.Center
+            )
         }
     }
 
@@ -99,6 +112,32 @@ class MainScreen : BaseScreen {
         }
     }
 
+    @Composable
+    fun LanguageSelection(viewModel: Store) {
+        val languages = listOf("English", "Spanish", "French", "German") // Список доступных языков
+
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = "Select a language:", fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            languages.forEach { language ->
+                LanguageItem(language = language, viewModel)
+            }
+        }
+    }
+
+    @Composable
+    fun LanguageItem(language: String, viewModel: Store) {
+        Text(
+            text = language,
+            modifier = Modifier
+                .clickable { viewModel.update(Event.Ui.ChangeLanguage(Languages.RUSSIAN)) }
+                .padding(8.dp)
+        )
+    }
+
     @Preview(showBackground = true)
     @Composable
     override fun DisplayContent() {
@@ -109,6 +148,9 @@ class MainScreen : BaseScreen {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
+                LanguageSelection(
+                    viewModel
+                )
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         TextOfFact(viewModel)
@@ -116,9 +158,13 @@ class MainScreen : BaseScreen {
                             RefreshTheFact(viewModel)
                             StarOfFavorite()
                         }
+                        TranslateFact(viewModel = viewModel)
                     }
                 }
             }
+
         }
     }
 }
+
+
