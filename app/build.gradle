@@ -75,5 +75,11 @@ dependencies {
     // Room
     implementation libs.bundles.room
     kapt libs.androidx.room.compiler
+
+    // Timber
+    implementation libs.timber
+
+    // Locale
+    implementation libs.lingver
 }
 

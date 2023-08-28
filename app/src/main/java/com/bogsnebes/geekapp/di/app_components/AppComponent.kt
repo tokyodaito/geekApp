@@ -1,17 +1,20 @@
 package com.bogsnebes.geekapp.di.app_components
 
 import android.content.Context
-import com.bogsnebes.geekapp.ui.elements.BottomNavMenu
-import com.bogsnebes.geekapp.ui.screens.main_screen.MainScreen
+import com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu.BottomNavMenu
+import com.bogsnebes.geekapp.ui.screens.main.MainScreen
+import com.yariksoffice.lingver.Lingver
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class])
+@Component(modules = [AppModule::class, LocaleModule::class])
 interface AppComponent {
     fun getMainScreen(): MainScreen
 
     fun getBottomNavMenu(): BottomNavMenu
 
     fun getApplicationContext(): Context
+
+    fun getLingver(): Lingver
 }

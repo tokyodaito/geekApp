@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">geekapp</string>
 
+    <!--  BottomNavMenu  -->
+    <string name="settings">Настройки</string>
+    <string name="main">Главная</string>
+    <string name="favorites">Избранное</string>
+
     <!--  Main Screen  -->
     <string name="button_of_getting_new_fact">Новый факт</string>
     <string name="delete_from_favorites">Удалить из избранного</string>

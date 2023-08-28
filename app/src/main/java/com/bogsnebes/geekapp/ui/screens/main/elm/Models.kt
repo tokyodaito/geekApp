@@ -1,13 +1,11 @@
-package com.bogsnebes.geekapp.ui.screens.main_screen.elm
+package com.bogsnebes.geekapp.ui.screens.main.elm
 
-import com.bogsnebes.geekapp.Application
 import com.bogsnebes.geekapp.Languages
-import com.bogsnebes.geekapp.model.network.api.FactsApi
-import org.intellij.lang.annotations.Language
+import com.bogsnebes.geekapp.model.database.dto.FactDto
 
 data class State(
     val isLoading: Boolean,
-    val data: String?
+    val data: FactDto?
 )
 
 sealed class Event {
@@ -15,11 +13,13 @@ sealed class Event {
         data object Init : Ui()
         data object ClickReload : Ui()
         data class ChangeLanguage(val language: Languages) : Ui()
+        data class ClickToFavorites(val data: FactDto?) : Ui()
     }
 
     sealed class Internal : Event() {
-        data class DataLoaded(val data: String) : Internal()
+        data class DataLoaded(val data: FactDto) : Internal()
         data object ErrorLoadingValue : Internal()
+        data object ChangeLanguage : Internal()
     }
 }
 

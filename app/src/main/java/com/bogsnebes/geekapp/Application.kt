@@ -4,64 +4,31 @@ import android.app.Application
 import com.bogsnebes.geekapp.di.app_components.AppComponent
 import com.bogsnebes.geekapp.di.app_components.AppModule
 import com.bogsnebes.geekapp.di.app_components.DaggerAppComponent
+import com.bogsnebes.geekapp.di.app_components.LocaleModule
 import com.bogsnebes.geekapp.di.database.DaggerDataBaseComponent
 import com.bogsnebes.geekapp.di.database.DataBaseComponent
 import com.bogsnebes.geekapp.di.database.DataBaseModule
 import com.bogsnebes.geekapp.di.network.DaggerNetworkComponent
 import com.bogsnebes.geekapp.di.network.NetworkComponent
+import timber.log.Timber
 
 class Application : Application() {
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(applicationContext)).build()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
+        appComponent = DaggerAppComponent.builder().appModule(AppModule(applicationContext))
+            .localeModule(LocaleModule(applicationContext, this)). build ()
         dataBaseComponent =
             DaggerDataBaseComponent.builder().dataBaseModule(DataBaseModule(applicationContext))
                 .build()
         networkComponent = DaggerNetworkComponent.builder().build()
 
+        appComponent.getLingver()
         networkComponent.getRetrofit()
         dataBaseComponent.getDatabase()
-    }
-
-    fun changeLanguage(languages: Languages) {
-        when (languages) {
-            Languages.ENGLISH -> {
-                val locale = Locale("en")
-                Locale.setDefault(locale)
-                context.apply {
-                    resources.configuration.setLocale(
-                        locale
-                    )
-                    createConfigurationContext(resources.configuration)
-                    ActivityCompat.recreate(appComponent.getMainActivity())
-                }
-            }
-
-            Languages.GERMAN -> {
-                val locale = Locale("ge")
-                Locale.setDefault(locale)
-                context.apply {
-                    resources.configuration.setLocale(
-                        locale
-                    )
-                    createConfigurationContext(resources.configuration)
-                    ActivityCompat.recreate(appComponent.getMainActivity())
-                }
-
-            }
-
-            Languages.RUSSIAN -> {
-                val locale = Locale("ru")
-                Locale.setDefault(locale)
-                context.apply {
-                    resources.configuration.setLocale(
-                        locale
-                    )
-                    createConfigurationContext(resources.configuration)
-                    ActivityCompat.recreate(appComponent.getMainActivity())
-                }
-            }
-        }
     }
 
     companion object {

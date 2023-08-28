@@ -9,7 +9,7 @@ data class Fact(
     val text: String,
     @SerializedName("source")
     val source: String,
-    @SerializedName("sourceUrl")
+    @SerializedName("source_url")
     val sourceUrl: String,
     @SerializedName("language")
     val language: String,

@@ -1,4 +1,4 @@
-package com.bogsnebes.geekapp.ui.screens.main_screen.elm
+package com.bogsnebes.geekapp.ui.screens.main.elm
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
@@ -29,7 +29,10 @@ class Store : ViewModel() {
             }
 
             is Event.Ui.ChangeLanguage -> {
-                actor.changeLanguage(event.language)
+                reducer.internal(actor.changeLanguage(event.language))
+            }
+
+            is Event.Ui.ClickToFavorites -> {
             }
         }
     }

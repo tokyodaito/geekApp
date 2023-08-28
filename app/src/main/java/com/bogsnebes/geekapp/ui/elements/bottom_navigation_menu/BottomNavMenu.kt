@@ -1,5 +1,7 @@
-package com.bogsnebes.geekapp.ui.elements
+package com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -11,31 +13,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bogsnebes.geekapp.Application
 import com.bogsnebes.geekapp.R
 
 class BottomNavMenu {
+    @SuppressLint("NotConstructor")
     @Composable
-    fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = BottomNavItem.Main.screenRoute) {
-            composable(BottomNavItem.Settings.screenRoute) {
-
-            }
-            composable(BottomNavItem.Main.screenRoute) {
-                Application.appComponent.getMainScreen()
-            }
-            composable(BottomNavItem.Favorites.screenRoute) {
-
-            }
-        }
-    }
-
-    @Composable
-    fun BottomNavMenu(navController: NavController) {
+    fun BottomNavMenu(context: Context, navController: NavController) {
         val items = listOf(
             BottomNavItem.Settings,
             BottomNavItem.Main,
@@ -53,12 +37,12 @@ class BottomNavMenu {
                     icon = {
                         Icon(
                             painterResource(id = item.icon),
-                            contentDescription = item.title
+                            contentDescription = context.getString(item.titleResId)
                         )
                     },
                     label = {
                         Text(
-                            text = item.title,
+                            text = context.getString(item.titleResId),
                             fontSize = 9.sp
                         )
                     },
@@ -69,8 +53,8 @@ class BottomNavMenu {
                     onClick = {
                         navController.navigate(item.screenRoute) {
 
-                            navController.graph.startDestinationRoute?.let { screen_route ->
-                                popUpTo(screen_route) {
+                            navController.graph.startDestinationRoute?.let { screenRoute ->
+                                popUpTo(screenRoute) {
                                     saveState = true
                                 }
                             }

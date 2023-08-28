@@ -1,6 +1,7 @@
-package com.bogsnebes.geekapp.ui.screens.main_screen.elm
+package com.bogsnebes.geekapp.ui.screens.main.elm
 
 import androidx.lifecycle.MutableLiveData
+import com.bogsnebes.geekapp.ui.MainActivity
 
 class Reducer(
     private val state: MutableLiveData<State>,
@@ -15,6 +16,10 @@ class Reducer(
             is Event.Internal.ErrorLoadingValue -> {
                 state.value = State(isLoading = false, data = null)
                 effect.value = Effect.ShowError
+            }
+
+            is Event.Internal.ChangeLanguage -> {
+                MainActivity.recreate()
             }
         }
     }

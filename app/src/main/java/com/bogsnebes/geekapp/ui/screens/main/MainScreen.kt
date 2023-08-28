@@ -1,5 +1,7 @@
-package com.bogsnebes.geekapp.ui.screens.main_screen
+package com.bogsnebes.geekapp.ui.screens.main
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,15 +29,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bogsnebes.geekapp.Languages
 import com.bogsnebes.geekapp.R
 import com.bogsnebes.geekapp.ui.screens.BaseScreen
-import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Event
-import com.bogsnebes.geekapp.ui.screens.main_screen.elm.State
-import com.bogsnebes.geekapp.ui.screens.main_screen.elm.Store
+import com.bogsnebes.geekapp.ui.screens.main.elm.Effect
+import com.bogsnebes.geekapp.ui.screens.main.elm.Event
+import com.bogsnebes.geekapp.ui.screens.main.elm.State
+import com.bogsnebes.geekapp.ui.screens.main.elm.Store
 import com.bogsnebes.geekapp.ui.theme.GeekappTheme
 
 class MainScreen : BaseScreen {
@@ -75,13 +77,11 @@ class MainScreen : BaseScreen {
     @Composable
     fun TextOfFact(viewModel: Store) {
         val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
-        (if (state.value.data != null) state.value.data else "GACHI")?.let {
-            Text(
-                text = it,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
+        Text(
+            text = state.value.data?.text ?: "GACHI",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 
     /* TODO: Эффект частиц.
@@ -89,32 +89,43 @@ class MainScreen : BaseScreen {
 * */
 
     @Composable
-    fun StarOfFavorite() {
+    fun StarOfFavorite(viewModel: Store) {
         var isSelected by remember { mutableStateOf(false) }
         val startPaddingOfStar = 12.dp
 
-        if (isSelected) {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_star_24),
-                contentDescription = stringResource(R.string.delete_from_favorites),
-                modifier = Modifier
-                    .padding(start = startPaddingOfStar)
-                    .clickable { isSelected = false }
-            )
+        val painterResource = if (isSelected) {
+            painterResource(id = R.drawable.baseline_star_24)
         } else {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_star_border_24),
-                contentDescription = stringResource(R.string.add_to_favorites),
-                modifier = Modifier
-                    .padding(start = startPaddingOfStar)
-                    .clickable { isSelected = true }
-            )
+            painterResource(id = R.drawable.baseline_star_border_24)
         }
+
+        val contentDescription = if (isSelected) {
+            stringResource(R.string.delete_from_favorites)
+        } else {
+            stringResource(R.string.add_to_favorites)
+        }
+
+        Image(
+            painter = painterResource,
+            contentDescription = contentDescription,
+            modifier = Modifier
+                .padding(start = startPaddingOfStar)
+                .clickable {
+                    isSelected = !isSelected
+                    viewModel.update(Event.Ui.ClickToFavorites(viewModel.state.value?.data))
+                }
+        )
     }
 
     @Composable
     fun LanguageSelection(viewModel: Store) {
-        val languages = listOf("English", "Spanish", "French", "German") // Список доступных языков
+        val languageMap = mapOf(
+            "English" to Languages.ENGLISH,
+            "German" to Languages.GERMAN,
+            "Russian" to Languages.RUSSIAN
+        )
+
+        val languages = languageMap.keys.toList() // Список доступных языков
 
         Column(
             modifier = Modifier.padding(16.dp)
@@ -123,25 +134,32 @@ class MainScreen : BaseScreen {
             Spacer(modifier = Modifier.height(8.dp))
 
             languages.forEach { language ->
-                LanguageItem(language = language, viewModel)
+                LanguageItem(language = language, viewModel, languageMap)
             }
         }
     }
 
     @Composable
-    fun LanguageItem(language: String, viewModel: Store) {
+    fun LanguageItem(language: String, viewModel: Store, languageMap: Map<String, Languages>) {
         Text(
             text = language,
             modifier = Modifier
-                .clickable { viewModel.update(Event.Ui.ChangeLanguage(Languages.RUSSIAN)) }
+                .clickable {
+                    val selectedLanguage = languageMap[language]
+                    selectedLanguage?.let {
+                        viewModel.update(Event.Ui.ChangeLanguage(it))
+                    }
+                }
                 .padding(8.dp)
         )
     }
 
-    @Preview(showBackground = true)
+
     @Composable
-    override fun DisplayContent() {
+    override fun DisplayContent(context: Context) {
         val viewModel: Store = viewModel()
+        val effect = viewModel.effect.observeAsState()
+
         viewModel.update(Event.Ui.Init)
         GeekappTheme {
             Surface(
@@ -156,10 +174,14 @@ class MainScreen : BaseScreen {
                         TextOfFact(viewModel)
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RefreshTheFact(viewModel)
-                            StarOfFavorite()
+                            StarOfFavorite(viewModel)
                         }
                         TranslateFact(viewModel = viewModel)
                     }
+                }
+
+                if (effect.value == Effect.ShowError) {
+                    Toast.makeText(context, "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
                 }
             }
 
