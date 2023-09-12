@@ -58,16 +58,6 @@ class MainScreen : BaseScreen {
     }
 
     @Composable
-    fun TranslateFact(viewModel: Store) {
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 8.dp)) {
-            Text(
-                text = stringResource(id = R.string.translate_the_fact),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-
-    @Composable
     fun TextOfFact(viewModel: Store) {
         val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
         Text(
@@ -132,12 +122,14 @@ class MainScreen : BaseScreen {
                             RefreshTheFact(viewModel)
                             StarOfFavorite(viewModel)
                         }
-                        TranslateFact(viewModel = viewModel)
                     }
                 }
 
                 if (effect.value == Effect.ShowError) {
-                    Toast.makeText(context, "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        stringResource(R.string.error_of_load_data), Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 

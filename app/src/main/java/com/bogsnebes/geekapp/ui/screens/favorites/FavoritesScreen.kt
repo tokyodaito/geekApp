@@ -49,13 +49,16 @@ class FavoritesScreen : BaseScreen {
         val items = viewModel.state.observeAsState().value?.data
 
         if (items != null) {
-            LazyColumn {
+            LazyColumn(modifier = Modifier
+                .padding(horizontal = 5.dp)
+                .padding(top = 12.dp)) {
                 items(items) { item ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
-                        elevation = 4.dp
+                        elevation = 4.dp,
+                        backgroundColor = MaterialTheme.colorScheme.primary
                     ) {
                         Row(
                             modifier = Modifier
@@ -66,7 +69,8 @@ class FavoritesScreen : BaseScreen {
                                 text = item.text,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(end = 8.dp)
+                                    .padding(end = 8.dp),
+                                color = MaterialTheme.colorScheme.inversePrimary
                             )
                             StarOfFavorite(item, viewModel)
                         }

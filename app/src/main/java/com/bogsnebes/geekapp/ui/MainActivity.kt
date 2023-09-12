@@ -14,21 +14,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bogsnebes.geekapp.Application
 import com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu.BottomNavItem
-import com.bogsnebes.geekapp.ui.screens.BaseScreen
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
-    private val screens = setOf(TabScreen.MainScreen, TabScreen.FavoriteScreen)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         activity = this
 
-        val currentScreen: BaseScreen =
-            screens.find { it == TabScreen.MainScreen }?.screen ?: TabScreen.MainScreen.screen
-
         super.onCreate(savedInstanceState)
         setContent {
-
             val navController = rememberNavController()
 
             NavigationGraph(navController = navController)

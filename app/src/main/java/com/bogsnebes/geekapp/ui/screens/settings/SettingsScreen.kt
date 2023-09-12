@@ -81,7 +81,8 @@ class SettingsScreen : BaseScreen {
                 )
 
                 if (effect.value == Effect.ShowError) {
-                    Toast.makeText(context, "Ошибка смены языка", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,
+                        stringResource(R.string.error_of_change_language), Toast.LENGTH_SHORT).show()
                 }
             }
 
