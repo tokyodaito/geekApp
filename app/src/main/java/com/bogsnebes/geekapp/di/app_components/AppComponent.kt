@@ -2,6 +2,7 @@ package com.bogsnebes.geekapp.di.app_components
 
 import android.content.Context
 import com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu.BottomNavMenu
+import com.bogsnebes.geekapp.ui.screens.favorites.FavoritesScreen
 import com.bogsnebes.geekapp.ui.screens.main.MainScreen
 import com.yariksoffice.lingver.Lingver
 import dagger.Component
@@ -17,4 +18,6 @@ interface AppComponent {
     fun getApplicationContext(): Context
 
     fun getLingver(): Lingver
+
+    fun getFavoriteScreen(): FavoritesScreen
 }

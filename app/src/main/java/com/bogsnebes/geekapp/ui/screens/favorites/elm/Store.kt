@@ -1,4 +1,4 @@
-package com.bogsnebes.geekapp.ui.screens.main.elm
+package com.bogsnebes.geekapp.ui.screens.favorites.elm
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
@@ -24,25 +24,12 @@ class Store : ViewModel() {
                 changeStateToLoad()
             }
 
-            is Event.Ui.ClickReload -> {
-                changeStateToLoad()
-            }
-
-            is Event.Ui.ChangeLanguage -> {
-                executeActor(Command.ChangeLanguage(event.language))
-            }
-
-            is Event.Ui.ClickToFavorites -> {
-                executeActor(Command.ChangeFavorite(event.data))
-            }
-
-            is Event.Ui.CheckFavorite -> {
-                executeActor(Command.CheckFavorite(event.id))
+            is Event.Ui.DeleteFavorite -> {
+                executeActor(Command.DeleteFavorite(event.data))
             }
         }
     }
 
-    @SuppressLint("CheckResult")
     private fun changeStateToLoad() {
         _state.value = State(isLoading = true, _state.value?.data)
         _effect.value = null

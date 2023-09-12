@@ -154,8 +154,12 @@ class MainScreen : BaseScreen {
     override fun DisplayContent(context: Context) {
         val viewModel: Store = viewModel()
         val effect = viewModel.effect.observeAsState()
+        if (viewModel.state.value == null)
+            viewModel.update(Event.Ui.Init)
+        else
+            viewModel.state.value!!.data?.fact?.let { Event.Ui.CheckFavorite(it.id) }
+                ?.let { viewModel.update(it) }
 
-        viewModel.update(Event.Ui.Init)
         GeekappTheme {
             Surface(
                 modifier = Modifier.fillMaxSize(),

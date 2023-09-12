@@ -29,6 +29,13 @@ class Reducer(
             Event.Internal.DeleteFavorite -> {
                 setFavoriteStatus(false)
             }
+
+            is Event.Internal.ErrorCheckFavorite -> {
+            }
+
+            is Event.Internal.StatusFavorite -> {
+                setFavoriteStatus(event.status)
+            }
         }
     }
 

@@ -18,7 +18,7 @@ import com.bogsnebes.geekapp.ui.screens.BaseScreen
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
-    private val screens = setOf<TabScreen>(TabScreen.MainScreen)
+    private val screens = setOf(TabScreen.MainScreen, TabScreen.FavoriteScreen)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         activity = this
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             Column {
                 Column(modifier = Modifier.fillMaxSize()) {
                     Box(modifier = Modifier.weight(1f)) {
-                        currentScreen.DisplayContent(this@MainActivity)
+                        NavigationGraph(navController = navController)
                     }
                     Application.appComponent.getBottomNavMenu()
                         .BottomNavMenu(this@MainActivity, navController = navController)
@@ -52,10 +52,10 @@ class MainActivity : ComponentActivity() {
 
             }
             composable(BottomNavItem.Main.screenRoute) {
-                Application.appComponent.getMainScreen()
+                TabScreen.MainScreen.screen.DisplayContent(context = this@MainActivity)
             }
             composable(BottomNavItem.Favorites.screenRoute) {
-
+                TabScreen.FavoriteScreen.screen.DisplayContent(context = this@MainActivity)
             }
         }
     }
