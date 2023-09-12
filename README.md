@@ -1,2 +1,3 @@
 # geekApp
-Compose + DaggerHilt + Retrofit + RxJava + MVI (ELM arc)
+Compose + Dagger2 + Retrofit + RxJava + MVI (ELM arc)
+
