@@ -28,7 +28,6 @@ sealed class Event {
         data object ChangeLanguage : Internal()
         data object DeleteFavorite : Internal()
         data object AddFavorite : Internal()
-
         data class StatusFavorite(val status: Boolean) : Internal()
         data object ErrorCheckFavorite : Internal()
     }

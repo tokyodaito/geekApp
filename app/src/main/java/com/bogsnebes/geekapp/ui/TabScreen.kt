@@ -15,4 +15,9 @@ sealed class TabScreen {
         override val screen: BaseScreen
             get() = Application.appComponent.getFavoriteScreen()
     }
+
+    data object SettingsScreen : TabScreen() {
+        override val screen: BaseScreen
+            get() = Application.appComponent.getSettingsScreen()
+    }
 }

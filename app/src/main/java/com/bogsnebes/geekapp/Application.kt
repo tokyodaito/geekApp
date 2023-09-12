@@ -20,7 +20,7 @@ class Application : Application() {
         }
 
         appComponent = DaggerAppComponent.builder().appModule(AppModule(applicationContext))
-            .localeModule(LocaleModule(applicationContext, this)). build ()
+            .localeModule(LocaleModule(applicationContext, this)).build()
         dataBaseComponent =
             DaggerDataBaseComponent.builder().dataBaseModule(DataBaseModule(applicationContext))
                 .build()

@@ -4,6 +4,7 @@ import android.content.Context
 import com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu.BottomNavMenu
 import com.bogsnebes.geekapp.ui.screens.favorites.FavoritesScreen
 import com.bogsnebes.geekapp.ui.screens.main.MainScreen
+import com.bogsnebes.geekapp.ui.screens.settings.SettingsScreen
 import dagger.Module
 import dagger.Provides
 
@@ -25,5 +26,10 @@ class AppModule(private val applicationContext: Context) {
     @Provides
     fun getFavoriteScreen(): FavoritesScreen {
         return FavoritesScreen()
+    }
+
+    @Provides
+    fun getSettingsScreen(): SettingsScreen {
+        return SettingsScreen()
     }
 }

@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     fun NavigationGraph(navController: NavHostController) {
         NavHost(navController, startDestination = BottomNavItem.Main.screenRoute) {
             composable(BottomNavItem.Settings.screenRoute) {
-
+                TabScreen.SettingsScreen.screen.DisplayContent(context = this@MainActivity)
             }
             composable(BottomNavItem.Main.screenRoute) {
                 TabScreen.MainScreen.screen.DisplayContent(context = this@MainActivity)

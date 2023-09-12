@@ -11,4 +11,7 @@
     <string name="delete_from_favorites">Удалить из избранного</string>
     <string name="add_to_favorites">Добавить в избранное</string>
     <string name="translate_the_fact">Перевести</string>
+
+    <!--  Settings Screen  -->
+    <string name="select_a_language">Выбрать язык:</string>
 </resources>
