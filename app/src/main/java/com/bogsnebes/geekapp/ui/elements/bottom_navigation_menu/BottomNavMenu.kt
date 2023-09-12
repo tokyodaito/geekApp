@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
@@ -19,16 +20,22 @@ import com.bogsnebes.geekapp.R
 class BottomNavMenu {
     @SuppressLint("NotConstructor")
     @Composable
-    fun BottomNavMenu(context: Context, navController: NavController) {
+    fun BottomNavMenu(navController: NavController) {
+        val context = LocalContext.current
         val items = listOf(
             BottomNavItem.Settings,
             BottomNavItem.Main,
             BottomNavItem.Favorites,
         )
 
+        val backgroundColor = colorResource(id = R.color.teal_200)
+        val contentColor = Color.Black
+        val unselectedContentColor = Color.Black.copy(alpha = 0.4f)
+        val fontSize = 9.sp
+
         BottomNavigation(
-            backgroundColor = colorResource(id = R.color.teal_200),
-            contentColor = Color.Black
+            backgroundColor = backgroundColor,
+            contentColor = contentColor
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
@@ -43,16 +50,15 @@ class BottomNavMenu {
                     label = {
                         Text(
                             text = context.getString(item.titleResId),
-                            fontSize = 9.sp
+                            fontSize = fontSize
                         )
                     },
-                    selectedContentColor = Color.Black,
-                    unselectedContentColor = Color.Black.copy(0.4f),
+                    selectedContentColor = contentColor,
+                    unselectedContentColor = unselectedContentColor,
                     alwaysShowLabel = true,
                     selected = currentRoute == item.screenRoute,
                     onClick = {
                         navController.navigate(item.screenRoute) {
-
                             navController.graph.startDestinationRoute?.let { screenRoute ->
                                 popUpTo(screenRoute) {
                                     saveState = true

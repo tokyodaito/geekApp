@@ -17,40 +17,49 @@ import com.bogsnebes.geekapp.ui.elements.bottom_navigation_menu.BottomNavItem
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    init {
         activity = this
+    }
 
+    private lateinit var navController: NavHostController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
+            navController = rememberNavController()
+            DisplayContent()
+        }
+    }
 
-            NavigationGraph(navController = navController)
+    @Composable
+    private fun DisplayContent() {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.weight(1f)) {
+                NavigationGraph()
+            }
+            BottomNavMenu()
+        }
+    }
 
-            Column {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        NavigationGraph(navController = navController)
-                    }
-                    Application.appComponent.getBottomNavMenu()
-                        .BottomNavMenu(this@MainActivity, navController = navController)
-                }
+    @Composable
+    private fun NavigationGraph() {
+        NavHost(navController, startDestination = BottomNavItem.Main.screenRoute) {
+            composable(BottomNavItem.Settings.screenRoute) {
+                TabScreen.SettingsScreen.screen.DisplayContent(this@MainActivity)
+            }
+            composable(BottomNavItem.Main.screenRoute) {
+                TabScreen.MainScreen.screen.DisplayContent(this@MainActivity)
+            }
+            composable(BottomNavItem.Favorites.screenRoute) {
+                TabScreen.FavoriteScreen.screen.DisplayContent(this@MainActivity)
             }
         }
     }
 
     @Composable
-    fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = BottomNavItem.Main.screenRoute) {
-            composable(BottomNavItem.Settings.screenRoute) {
-                TabScreen.SettingsScreen.screen.DisplayContent(context = this@MainActivity)
-            }
-            composable(BottomNavItem.Main.screenRoute) {
-                TabScreen.MainScreen.screen.DisplayContent(context = this@MainActivity)
-            }
-            composable(BottomNavItem.Favorites.screenRoute) {
-                TabScreen.FavoriteScreen.screen.DisplayContent(context = this@MainActivity)
-            }
-        }
+    private fun BottomNavMenu() {
+        Application.appComponent.getBottomNavMenu()
+            .BottomNavMenu(navController = navController)
     }
 
     companion object {
@@ -64,6 +73,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 /* TODO: Вступительный ViewPager
 * Сделать аналог ViewPager на Compose для отображения информации о приложении
