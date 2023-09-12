@@ -18,11 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -78,7 +74,7 @@ class MainScreen : BaseScreen {
     fun TextOfFact(viewModel: Store) {
         val state = viewModel.state.observeAsState(State(isLoading = false, data = null))
         Text(
-            text = state.value.data?.text ?: "GACHI",
+            text = state.value.data?.fact?.text ?: "GACHI",
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(16.dp)
         )
@@ -90,7 +86,7 @@ class MainScreen : BaseScreen {
 
     @Composable
     fun StarOfFavorite(viewModel: Store) {
-        var isSelected by remember { mutableStateOf(false) }
+        val isSelected: Boolean = viewModel.state.observeAsState().value?.data?.favorite ?: false
         val startPaddingOfStar = 12.dp
 
         val painterResource = if (isSelected) {
@@ -111,8 +107,7 @@ class MainScreen : BaseScreen {
             modifier = Modifier
                 .padding(start = startPaddingOfStar)
                 .clickable {
-                    isSelected = !isSelected
-                    viewModel.update(Event.Ui.ClickToFavorites(viewModel.state.value?.data))
+                    viewModel.update(Event.Ui.ClickToFavorites(viewModel.state.value?.data?.fact))
                 }
         )
     }

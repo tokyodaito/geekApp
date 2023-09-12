@@ -27,19 +27,25 @@ class Actor {
             )
                 .subscribeOn(Schedulers.io())
                 .toObservable()
-                .flatMapMaybe {
-                    Maybe.fromCallable<Event.Internal> {
-                        Event.Internal.DataLoaded(
-                            FactDto(
-                                id = it.id,
-                                text = it.text,
-                                source = it.source,
-                                sourceUrl = it.sourceUrl,
-                                language = it.language,
-                                permalink = it.permalink
-                            )
-                        )
-                    }
+                .flatMapMaybe { fact ->
+                    factsImpl.findFactById(fact.id)
+                        .isEmpty
+                        .flatMapMaybe {
+                            Maybe.fromCallable<Event.Internal> {
+                                Event.Internal.DataLoaded(
+                                    FactUi(
+                                        FactDto(
+                                            id = fact.id,
+                                            text = fact.text,
+                                            source = fact.source,
+                                            sourceUrl = fact.sourceUrl,
+                                            language = fact.language,
+                                            permalink = fact.permalink
+                                        ), !it
+                                    )
+                                )
+                            }
+                        }
                 }
                 .switchIfEmpty(Maybe.fromCallable<Event.Internal> { null }.toObservable())
                 .doOnError {
@@ -48,10 +54,20 @@ class Actor {
                 .onErrorResumeNext {
                     Observable.just(Event.Internal.ErrorLoadingValue)
                 }
+
+            is Command.ChangeFavorite -> {
+                command.data?.let { changeFavorite(it) }
+                    ?: Observable.just(Event.Internal.ErrorLoadingValue)
+            }
+
+            is Command.ChangeLanguage -> {
+                changeLanguage(command.language)
+            }
         }
     }
 
-    fun changeLanguage(languages: Languages): Event.Internal.ChangeLanguage {
+
+    private fun changeLanguage(languages: Languages): Observable<Event.Internal> {
         val context = Application.appComponent.getApplicationContext()
 
         val localeCode = when (languages) {
@@ -59,9 +75,28 @@ class Actor {
             Languages.GERMAN -> "de"
             Languages.RUSSIAN -> "ru"
         }
+
         Application.appComponent.getLingver().setLocale(context, localeCode)
         Timber.i("Selected language: %s", Application.appComponent.getLingver().getLocale())
-        return Event.Internal.ChangeLanguage
+        return Observable.just(Event.Internal.ChangeLanguage)
     }
 
+    private fun changeFavorite(data: FactDto): Observable<Event.Internal> {
+        return factsImpl.findFactById(data.id)
+            .subscribeOn(Schedulers.io())
+            .isEmpty
+            .flatMapObservable { isEmpty ->
+                if (isEmpty) {
+                    factsImpl.addFactToDatabase(data)
+                        .andThen(Observable.just(Event.Internal.AddFavorite))
+                } else {
+                    factsImpl.deleteFactOfDatabase(data)
+                        .andThen(Observable.just(Event.Internal.DeleteFavorite))
+                }
+            }
+            .onErrorReturn {
+                Timber.e(it, "Error changeFavorite")
+                Event.Internal.ErrorLoadingValue
+            }
+    }
 }

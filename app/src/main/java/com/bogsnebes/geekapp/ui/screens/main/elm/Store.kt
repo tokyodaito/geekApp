@@ -29,10 +29,11 @@ class Store : ViewModel() {
             }
 
             is Event.Ui.ChangeLanguage -> {
-                reducer.internal(actor.changeLanguage(event.language))
+                executeActor(Command.ChangeLanguage(event.language))
             }
 
             is Event.Ui.ClickToFavorites -> {
+                executeActor(Command.ChangeFavorite(event.data))
             }
         }
     }
@@ -41,7 +42,12 @@ class Store : ViewModel() {
     private fun changeStateToLoad() {
         _state.value = State(isLoading = true, _state.value?.data)
         _effect.value = null
-        actor.execute(Command.LoadNewData)
+        executeActor(Command.LoadNewData)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun executeActor(command: Command) {
+        actor.execute(command)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 reducer.internal(it)

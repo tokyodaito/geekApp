@@ -21,6 +21,23 @@ class Reducer(
             is Event.Internal.ChangeLanguage -> {
                 MainActivity.recreate()
             }
+
+            is Event.Internal.AddFavorite -> {
+                setFavoriteStatus(true)
+            }
+
+            Event.Internal.DeleteFavorite -> {
+                setFavoriteStatus(false)
+            }
         }
+    }
+
+    private fun setFavoriteStatus(status: Boolean) {
+        state.value =
+            state.value?.let {
+                State(it.isLoading,
+                    it.data?.fact?.let { factDto -> FactUi(factDto, status) }
+                )
+            }
     }
 }

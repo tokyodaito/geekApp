@@ -12,10 +12,13 @@ interface FactDao {
     fun getAll(): List<FactDto>
 
     @Query("SELECT * FROM fact WHERE id LIKE :id")
-    fun findById(id: String): FactDto
+    fun findById(id: String): FactDto?
 
     @Insert
     fun insertAll(vararg facts: FactDto)
+
+    @Insert
+    fun insert(fact: FactDto)
 
     @Delete
     fun delete(fact: FactDto)

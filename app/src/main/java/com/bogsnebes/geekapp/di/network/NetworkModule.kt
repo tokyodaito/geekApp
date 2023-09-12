@@ -1,5 +1,7 @@
 package com.bogsnebes.geekapp.di.network
 
+import com.bogsnebes.geekapp.Application
+import com.bogsnebes.geekapp.model.network.api.FactsApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -32,6 +34,11 @@ class NetworkModule {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
+    }
+
+    @Provides
+    fun getFactsApi(): FactsApi {
+        return Application.networkComponent.getRetrofit().create(FactsApi::class.java)
     }
 
     companion object {
